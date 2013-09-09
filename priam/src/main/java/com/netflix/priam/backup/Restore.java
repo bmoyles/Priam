@@ -134,8 +134,13 @@ public class Restore extends AbstractRestore
             if (path.type == BackupFileType.META)
                 metas.add(path);
         }
-        assert metas.size() != 0 : "[cass_backup] No snapshots found, Restore Failed.";
-
+        if (metas.size() == 0)
+        {
+        	logger.info("[cass_backup] No meta file found, Restore Failed.");
+        	 assert metas.size() != 0 : "[cass_backup] No snapshots found, Restore Failed.";
+        	return;
+        }
+       
         Collections.sort(metas);
         AbstractBackupPath meta = Iterators.getLast(metas.iterator());
         logger.info("Meta file for restore " + meta.getRemotePath());
